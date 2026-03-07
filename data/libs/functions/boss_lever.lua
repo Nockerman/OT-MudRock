@@ -113,7 +113,7 @@ end
 function BossLever:kvScope()
 	local mType = MonsterType(self.name)
 	if not mType then
-		error("BossLever: boss name is invalid")
+		error("BossLever: El nombre del Jefe es invalido")
 	end
 	return "boss.cooldown." .. toKey(tostring(mType:raceId()))
 end
@@ -134,7 +134,7 @@ end
 function BossLever:setLastEncounterTime(time)
 	local info = self.lever:getInfoPositions()
 	if not info then
-		logger.error("BossLever:setLastEncounterTime - lever:getInfoPositions() returned nil")
+		logger.error("BossLever:setLastEncounterTime - lever:getInfoPositions() ha retornado nil")
 		return false
 	end
 	for _, v in pairs(info) do
@@ -163,13 +163,13 @@ function BossLever:onUse(player)
 	end
 
 	if self.disabled then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The boss is temporarily disabled.")
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "El Jefe esta temporalmente desactivado.")
 		return true
 	end
 
 	local zone = self:getZone()
 	if zone:countPlayers(IgnoredByMonsters) > 0 then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "There's already someone fighting with " .. monsterName .. ".")
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Espera. Hay alguien combatiendo contra " .. monsterName .. ".")
 		return true
 	end
 
@@ -183,7 +183,7 @@ function BossLever:onUse(player)
 
 		local isAccountNormal = creature:getAccountType() < ACCOUNT_TYPE_GAMEMASTER
 		if isAccountNormal and creature:getLevel() < self.requiredLevel then
-			local message = "All players need to be level " .. self.requiredLevel .. " or higher."
+			local message = "Todos los jugadores necesitan ser nivel " .. self.requiredLevel .. " o superior."
 			creature:sendTextMessage(MESSAGE_EVENT_ADVANCE, message)
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, message)
 			return false
@@ -198,11 +198,11 @@ function BossLever:onUse(player)
 					local currentTime = os.time()
 					if lastEncounter and currentTime < lastEncounter then
 						local timeLeft = lastEncounter - currentTime
-						local timeMessage = Game.getTimeInWords(timeLeft) .. " to face " .. self.name .. " again!"
-						local message = "You have to wait " .. timeMessage
+						local timeMessage = Game.getTimeInWords(timeLeft) .. " para poder hacer frente a " .. self.name .. "!"
+						local message = "Tienes que esperar " .. timeMessage
 
 						if currentPlayer ~= player then
-							player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "A member in your team has to wait " .. timeMessage)
+							player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Un miembro de tu Grupo tiene que esperar " .. timeMessage)
 						end
 
 						currentPlayer:sendTextMessage(MESSAGE_EVENT_ADVANCE, message)
@@ -219,7 +219,7 @@ function BossLever:onUse(player)
 	lever:checkPositions()
 	if #lever:getPlayers() < self.minPlayers then
 		lever:executeOnPlayers(function(creature)
-			local message = string.format("You need %d qualified players for this challenge.", self.minPlayers)
+			local message = string.format("Necesitas %d personas cualificadas para poder enfrentar este desafio.", self.minPlayers)
 			creature:sendTextMessage(MESSAGE_EVENT_ADVANCE, message)
 			creature:getPosition():sendMagicEffect(CONST_ME_POFF)
 		end)
@@ -232,7 +232,7 @@ function BossLever:onUse(player)
 				return true
 			end
 		elseif self.bossPosition then
-			logger.debug("BossLever:onUse - creating boss: {}", self.name)
+			logger.debug("BossLever:onUse - Creando Jefe: {}", self.name)
 			local monster = Game.createMonster(self.name, self.bossPosition, true, true)
 			if not monster then
 				return true
@@ -292,7 +292,7 @@ function BossLever:register()
 	end
 	if #missingParams > 0 then
 		local name = self.name or "unknown"
-		logger.error("BossLever:register() - boss with name {} missing parameters: {}", name, table.concat(missingParams, ", "))
+		logger.error("BossLever:register() - A el Jefe con el nombre {} le faltan los siguientes parametros: {}", name, table.concat(missingParams, ", "))
 		return false
 	end
 

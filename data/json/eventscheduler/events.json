@@ -1,13 +1,13 @@
 {
 	"events": [
 		{
-			"name": "Forge Time",
+			"name": "Forjado a Fuego",
 			"startdate": "11/12/2024",
 			"enddate": "11/17/2024",
 			"ingame": {
 				"forgechance": 120
 			},
-			"description": "Increases the success rate of forges by 20%.",
+			"description": "Incrementa las probabilidades de forja en un 20%.",
 			"colors": {
 				"colordark": "#2b3e50",
 				"colorlight": "#3d5a73"
@@ -19,13 +19,13 @@
 			}
 		},
 		{
-			"name": "Double Bestiary",
+			"name": "Compendio de Criaturas",
 			"startdate": "11/12/2024",
 			"enddate": "11/17/2024",
 			"ingame": {
 				"doublebestiary": true
 			},
-			"description": "Doubles the bestiary counter when defeating monsters.",
+			"description": "Dobla la puntuacion obtenida para el Compendio de Criaturas.",
 			"colors": {
 				"colordark": "#3a4f2a",
 				"colorlight": "#4f713a"
@@ -37,13 +37,13 @@
 			}
 		},
 		{
-			"name": "Fast Exercise",
+			"name": "Entrenamiento Intensificado",
 			"startdate": "11/12/2024",
 			"enddate": "11/17/2024",
 			"ingame": {
 				"fastexercise": true
 			},
-			"description": "Exercise weapons are faster, doubling their speed.",
+			"description": "Mas velocidad al usar las Armas de Entrenamiento.",
 			"colors": {
 				"colordark": "#5a3a2a",
 				"colorlight": "#7b4f3a"
@@ -55,13 +55,13 @@
 			}
 		},
 		{
-			"name": "50% Loot Bonus",
+			"name": "Bono de Saqueo",
 			"startdate": "11/12/2024",
 			"enddate": "11/17/2024",
 			"ingame": {
 				"lootrate": 150
 			},
-			"description": "Increases loot by 50%.",
+			"description": "Incrementa el botin saqueado un 50%.",
 			"colors": {
 				"colordark": "#2b1e10",
 				"colorlight": "#4a2e18"
@@ -73,13 +73,13 @@
 			}
 		},
 		{
-			"name": "50% Exp Bonus",
+			"name": "Bono de Experiencia",
 			"startdate": "11/12/2024",
 			"enddate": "11/17/2024",
 			"ingame": {
 				"exprate": 150
 			},
-			"description": "Increases experience by 50%.",
+			"description": "Incrementa la experiencia un 50%.",
 			"colors": {
 				"colordark": "#234d00",
 				"colorlight": "#3a7500"
@@ -91,13 +91,13 @@
 			}
 		},
 		{
-			"name": "Boss Cooldown Reduction",
+			"name": "Tiempo de Jefes",
 			"startdate": "11/12/2024",
 			"enddate": "11/17/2024",
 			"ingame": {
 				"bosscooldown": 150
 			},
-			"description": "Reduces boss cooldown time by 50%.",
+			"description": "Reduce el tiempo para cazar Jefes un 50%.",
 			"colors": {
 				"colordark": "#2d3c5a",
 				"colorlight": "#4a5f7d"
@@ -109,13 +109,13 @@
 			}
 		},
 		{
-			"name": "Double Exp",
+			"name": "Doble Experiencia",
 			"startdate": "11/12/2024",
 			"enddate": "11/17/2024",
 			"ingame": {
 				"exprate": 200
 			},
-			"description": "Double experience when hunting monsters.",
+			"description": "Dobla la experiencia obtenida al cazar criaturas.",
 			"colors": {
 				"colordark": "#002d00",
 				"colorlight": "#004400"
@@ -127,13 +127,13 @@
 			}
 		},
 		{
-			"name": "Double Loot",
+			"name": "Doble Botin",
 			"startdate": "11/12/2024",
 			"enddate": "11/17/2024",
 			"ingame": {
 				"lootrate": 200
 			},
-			"description": "Doubles the amount of loot obtained from monsters.",
+			"description": "Dobla el botin saqueado de las criaturas.",
 			"colors": {
 				"colordark": "#2a1d00",
 				"colorlight": "#4c3300"
@@ -145,13 +145,13 @@
 			}
 		},
 		{
-			"name": "Double Bosstiary",
+			"name": "Compendio de Jefes",
 			"startdate": "11/12/2024",
 			"enddate": "11/17/2024",
 			"ingame": {
 				"doublebosstiary": true
 			},
-			"description": "Doubles the bestiary counter for bosses.",
+			"description": "Dobla la puntuacion obtenida para el Compendio de Jefes.",
 			"colors": {
 				"colordark": "#3a005a",
 				"colorlight": "#4e0075"
@@ -163,13 +163,13 @@
 			}
 		},
 		{
-			"name": "Fast Respawn",
+			"name": "Reaparicion Rapida",
 			"startdate": "11/01/2024",
 			"enddate": "11/15/2024",
 			"ingame": {
 				"spawnrate": 200
 			},
-			"description": "Monsters respawn twice as fast.",
+			"description": "Las criaturas reaparecen mucho mas rapido.",
 			"colors": {
 				"colordark": "#4d2f00",
 				"colorlight": "#6e3e00"

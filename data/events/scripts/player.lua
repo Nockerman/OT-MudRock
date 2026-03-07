@@ -85,7 +85,7 @@ local function antiPush(player, item, count, fromPosition, toPosition, fromCylin
 	end
 
 	if pushDelay[playerId].time > currentTime then
-		player:sendCancelMessage("You can't move that item so fast.")
+		player:sendCancelMessage("No puedes mover ese objeto tan deprisa.")
 		return false
 	end
 
@@ -219,14 +219,14 @@ function Player:onLookInBattleList(creature, distance)
 		end
 	end
 	if self:getGroup():getAccess() then
-		local str = "%s\nHealth: %d / %d"
+		local str = "%s\nVida: %d / %d"
 		if creature:isPlayer() and creature:getMaxMana() > 0 then
 			str = string.format("%s, Mana: %d / %d", str, creature:getMana(), creature:getMaxMana())
 		end
 		description = string.format(str, description, creature:getHealth(), creature:getMaxHealth()) .. "."
 
 		local position = creature:getPosition()
-		description = string.format("%s\nPosition: %d, %d, %d", description, position.x, position.y, position.z)
+		description = string.format("%s\nPosición: %d, %d, %d", description, position.x, position.y, position.z)
 
 		if creature:isPlayer() then
 			description = string.format("%s\nIP: %s", description, Game.convertIpToString(creature:getIp()))
@@ -381,7 +381,7 @@ function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder,
 		-- The Secret Library Quest
 		if toPosition == Position(32460, 32928, 7) and item.itemid == 3578 then
 			toPosition:sendMagicEffect(CONST_ME_HEARTS)
-			self:say("You feed the turtle, now you may pass.", TALKTYPE_MONSTER_SAY)
+			self:say("Has alimentado a la tortuga, ahora te dejara pasar.", TALKTYPE_MONSTER_SAY)
 			Game.setStorageValue(Storage.Quest.U11_80.TheSecretLibrary.SmallIslands.Turtle, os.time() + 10 * 60)
 			item:remove(1)
 		end
@@ -450,33 +450,33 @@ end
 function Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
 	local name = self:getName()
 	if hasPendingReport(self:getGuid(), targetName, reportType) then
-		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your report is being processed.")
+		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Tu reporte esta siendo procesado.")
 		return
 	end
 
 	local file = io.open(string.format("%s/reports/players/%s-%s-%d.txt", CORE_DIRECTORY, name, targetName, reportType), "a")
 	if not file then
-		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "There was an error when processing your report, please contact a gamemaster.")
+		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Ha ocurrido un error al procesar tu reporte, porfavor contacta con administracion.")
 		return
 	end
 
 	io.output(file)
 	io.write("------------------------------\n")
-	io.write("Reported by: " .. name .. "\n")
-	io.write("Target: " .. targetName .. "\n")
-	io.write("Type: " .. reportType .. "\n")
-	io.write("Reason: " .. reportReason .. "\n")
-	io.write("Comment: " .. comment .. "\n")
+	io.write("Reportado por: " .. name .. "\n")
+	io.write("Objeto: " .. targetName .. "\n")
+	io.write("Tipo: " .. reportType .. "\n")
+	io.write("Razon: " .. reportReason .. "\n")
+	io.write("Comentario: " .. comment .. "\n")
 	if reportType ~= REPORT_TYPE_BOT then
-		io.write("Translation: " .. translation .. "\n")
+		io.write("Traduccion: " .. translation .. "\n")
 	end
 	io.write("------------------------------\n")
 	io.close(file)
 	self:sendTextMessage(
 		MESSAGE_EVENT_ADVANCE,
 		string.format(
-			"Thank you for reporting %s. Your report \z
-	will be processed by %s team as soon as possible.",
+			"Gracias por tu reporte <3 %s. Tu reporte \z
+	sera procesado por el equipo %s lo antes posible.",
 			targetName,
 			configManager.getString(configKeys.SERVER_NAME)
 		)
@@ -490,22 +490,22 @@ function Player:onReportBug(message, position, category)
 	local file = io.open(string.format("%s/reports/bugs/%s/report.txt", CORE_DIRECTORY, name), "a")
 
 	if not file then
-		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "There was an error when processing your report, please contact a gamemaster.")
+		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Ha ocurrido un error al procesar tu reporte, porfavor contacta con administracion.")
 		return true
 	end
 
 	io.output(file)
 	io.write("------------------------------\n")
-	io.write("Name: " .. name)
+	io.write("Nombre: " .. name)
 	if category == BUG_CATEGORY_MAP then
-		io.write(" [Map position: " .. position.x .. ", " .. position.y .. ", " .. position.z .. "]")
+		io.write(" [Posicion del Mapa: " .. position.x .. ", " .. position.y .. ", " .. position.z .. "]")
 	end
 	local playerPosition = self:getPosition()
-	io.write(" [Player Position: " .. playerPosition.x .. ", " .. playerPosition.y .. ", " .. playerPosition.z .. "]\n")
-	io.write("Comment: " .. message .. "\n")
+	io.write(" [Posicion del Jugador: " .. playerPosition.x .. ", " .. playerPosition.y .. ", " .. playerPosition.z .. "]\n")
+	io.write("Comentario: " .. message .. "\n")
 	io.close(file)
 
-	self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your report has been sent to " .. configManager.getString(configKeys.SERVER_NAME) .. ".")
+	self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Tu reporte ha sido enviado a " .. configManager.getString(configKeys.SERVER_NAME) .. ".")
 	return true
 end
 
@@ -670,14 +670,14 @@ function Player:onChangeZone(zone)
 							delay = configManager.getNumber(configKeys.STAMINA_GREEN_DELAY)
 						end
 
-						local message = string.format("In protection zone. Recharging %i stamina every %i minutes.", configManager.getNumber(configKeys.STAMINA_PZ_GAIN), delay)
+						local message = string.format("En Zona de Proteccion. Recargando %i de aguante cada %i minutos.", configManager.getNumber(configKeys.STAMINA_PZ_GAIN), delay)
 						self:sendTextMessage(MESSAGE_FAILURE, message)
 						staminaBonus.eventsPz[self:getId()] = addEvent(addStamina, delay * 60 * 1000, nil, self:getId(), delay * 60 * 1000)
 					end
 				end
 			else
 				if event then
-					self:sendTextMessage(MESSAGE_FAILURE, "You are no longer refilling stamina, since you left a regeneration zone.")
+					self:sendTextMessage(MESSAGE_FAILURE, "Ya no estas regenerando tu aguante.")
 					stopEvent(event)
 					staminaBonus.eventsPz[self:getId()] = nil
 				end

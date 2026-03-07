@@ -9,7 +9,7 @@ function Container:addLoot(loot)
 	for itemId, item in pairs(loot) do
 		local iType = ItemType(itemId)
 		if not iType then
-			logger.warn("Container:addLoot: invalid item type: {}", itemId)
+			logger.warn("Container:addLoot: tipo de objeto invalido: {}", itemId)
 			goto continue
 		end
 		if iType:isStackable() then
@@ -20,7 +20,7 @@ function Container:addLoot(loot)
 				local countToAdd = math.min(remainingCount, stackSize)
 				local tmpItem = self:addItem(itemId, countToAdd, INDEX_WHEREEVER, FLAG_NOLIMIT)
 				if not tmpItem then
-					logger.warn("Container:addLoot: failed to add stackable item: {} with id {}, to corpse {} with id {}", ItemType(itemId):getName(), itemId, self:getName(), self:getId())
+					logger.warn("Container:addLoot: Fallo al agregar el objeto apilable: {} con id {}, al cuerpo {} con id {}", ItemType(itemId):getName(), itemId, self:getName(), self:getId())
 					goto continue
 				end
 				remainingCount = remainingCount - countToAdd
@@ -28,13 +28,13 @@ function Container:addLoot(loot)
 		elseif iType:getCharges() ~= 0 then
 			local tmpItem = self:addItem(itemId, item.count, INDEX_WHEREEVER, FLAG_NOLIMIT)
 			if not tmpItem then
-				logger.warn("Container:addLoot: failed to add charge item: {} with id {}, to corpse {} with id {}", ItemType(itemId):getName(), itemId, self:getName(), self:getId())
+				logger.warn("Container:addLoot: Fallo al añadir cargas al objeto: {} con id {}, al cuerpo {} con id {}", ItemType(itemId):getName(), itemId, self:getName(), self:getId())
 			end
 		else
 			for i = 1, item.count do
 				local tmpItem = self:addItem(itemId, 1, INDEX_WHEREEVER, FLAG_NOLIMIT)
 				if not tmpItem then
-					logger.warn("Container:addLoot: failed to add item: {} with id {}, to corpse {} with id {}", ItemType(itemId):getName(), itemId, self:getName(), self:getId())
+					logger.warn("Container:addLoot: Fallo al añadir el objeto: {} con id {}, al cuerpo {} con id {}", ItemType(itemId):getName(), itemId, self:getName(), self:getId())
 					goto continue
 				end
 
@@ -73,7 +73,7 @@ function Container:addRewardBossItems(itemList)
 			local charges = iType:getCharges()
 			if charges > 0 then
 				itemCount = charges
-				logger.debug("Adding item with 'id' to the reward container, item charges {}", iType:getId(), charges)
+				logger.debug("Añadiendo objeto con 'id' al cofre de recompensas, cargas del objeto {}", iType:getId(), charges)
 			end
 			if iType:isStackable() or iType:getCharges() ~= 0 then
 				self:addItem(itemId, itemCount, INDEX_WHEREEVER, FLAG_NOLIMIT)

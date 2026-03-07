@@ -8,7 +8,7 @@ local function validateMissionId(missionId, questName, owners)
 		owners[questName] = questOwners
 	end
 	if questOwners[missionId] then
-		error(string.format('Duplicate mission id %d found in quest "%s"', missionId, questName))
+		error(string.format('ID de mision Duplicada (%d) encontrada en la mision: "%s"', missionId, questName))
 	end
 	questOwners[missionId] = true
 end
@@ -20,7 +20,7 @@ local function validateStartStorage(quest, questName, owners)
 	end
 	local owner = owners[storage]
 	if owner and owner ~= questName then
-		error(string.format('Duplicate quest start storage %d found in quests "%s" and "%s"', storage, owner, questName))
+		error(string.format('Duplicado Inicio de Guardado (%d) encontrado en las misiones "%s" y "%s"', storage, owner, questName))
 	end
 	owners[storage] = questName
 end
@@ -33,7 +33,7 @@ local function buildCatalog(namespace, questModules)
 	for index, moduleName in ipairs(questModules) do
 		local quest = require(namespace .. "." .. moduleName)
 		if type(quest) ~= "table" then
-			error(string.format("Quest module %s did not return a table", moduleName))
+			error(string.format("El Modulo de Mision %s no ha devuelto ninguna tabla", moduleName))
 		end
 		local questName = quest.name or moduleName
 		quests[index] = quest

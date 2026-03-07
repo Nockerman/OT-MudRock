@@ -33,9 +33,9 @@ end
 function getTibiaTimerDayOrNight()
 	local light = getWorldLight()
 	if light == 40 then
-		return "night"
+		return "noche"
 	else
-		return "day"
+		return "dia"
 	end
 end
 
@@ -81,7 +81,7 @@ debug.sethook(function(event, line)
 	linecount = linecount + 1
 	if systemTime() - start >= 1 then
 		if linecount >= 30000 then
-			logger.warn("[debug.sethook] - Possible infinite loop in file [{}] near line [{}]", debug.getinfo(2).source, line)
+			logger.warn("[debug.sethook] - Posible bucle infinito en [{}] linea [{}]", debug.getinfo(2).source, line)
 			debug.sethook()
 		end
 		linecount = 0
@@ -96,11 +96,12 @@ function getJackLastMissionState(player)
 	end
 
 	if player:getStorageValue(Storage.TibiaTales.JackFutureQuest.LastMissionState) == 1 then
-		return "You told Jack the truth about his personality. You also explained that you and Spectulus \z
-		made a mistake by assuming him as the real Jack."
+		return "Le contaste a Jack la verdad sobre su personalidad.  \z
+		También explicaste que tú y Spectulus cometieron un error al asumir que era el verdadero Jack."
 	else
-		return "You lied to the confused Jack about his true personality. You and Spectulus made him \z
-		believe that he is in fact a completely different person. Now he will never be able to find out the truth."
+		return "Le mentiste al confundido Jack sobre su verdadera personalidad. \z
+		Tú y Spectulus le hicieron creer que, en realidad, es una persona completamente diferente. \z
+		Ahora nunca podrá descubrir la verdad."
 	end
 end
 
@@ -128,7 +129,7 @@ function getBankMoney(cid, amount)
 	local player = Player(cid)
 	if player:getBankBalance() >= amount then
 		player:setBankBalance(player:getBankBalance() - amount)
-		player:sendTextMessage(MESSAGE_TRADE, "Paid " .. FormatNumber(amount) .. " gold from bank account. Your account balance is now " .. FormatNumber(player:getBankBalance()) .. " gold.")
+		player:sendTextMessage(MESSAGE_TRADE, "Has pagado " .. FormatNumber(amount) .. " monedas de oro. El saldo de tu cuenta es de " .. FormatNumber(player:getBankBalance()) .. " monedas de oro.")
 		return true
 	end
 	return false
@@ -272,7 +273,7 @@ function clearForgotten(fromPosition, toPosition, exitPosition, storage)
 						if creature:isPlayer() then
 							creature:teleportTo(exitPosition)
 							exitPosition:sendMagicEffect(CONST_ME_TELEPORT)
-							creature:say("Time out! You were teleported out by strange forces.", TALKTYPE_MONSTER_SAY)
+							creature:say("Se ha acabado el tiempo! Fuiste teletransportado por una fuerza misteriosa.", TALKTYPE_MONSTER_SAY)
 						elseif creature:isMonster() then
 							creature:remove()
 						end
@@ -313,7 +314,7 @@ function resetFerumbrasAscendantHabitats()
 		if spec:isPlayer() then
 			spec:teleportTo(Position(33630, 32648, 12))
 			spec:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
-			spec:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You were teleported because the habitats are returning to their original form.")
+			spec:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Has sido teletransportado porque los habitats estan retornando a su forma original.")
 		elseif spec:isMonster() then
 			spec:remove()
 		end
@@ -637,11 +638,11 @@ end
 function checkWeightAndBackpackRoom(player, itemWeight, message)
 	local backpack = player:getSlotItem(CONST_SLOT_BACKPACK)
 	if not backpack or backpack:getEmptySlots(true) < 1 then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, message .. ", but you have no room to take it.")
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, message .. ", pero no tienes espacio para llevartelo.")
 		return false
 	end
 	if (player:getFreeCapacity() / 100) < itemWeight then
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, message .. ". Weighing " .. itemWeight .. " oz, it is too heavy for you to carry.")
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, message .. ". Pesa " .. itemWeight .. " oz, es muy pesado para llevartelo.")
 		return false
 	end
 	return true
@@ -754,7 +755,7 @@ function indexToStr(i, v, buffer)
 			table.insert(buffer, v == true and "true" or "false")
 			table.insert(buffer, ",")
 		else
-			logger.warn("[indexToStr] - Invalid type to serialize: {}, index: {}", tp, i)
+			logger.warn("[indexToStr] - Tipo invalido para inicializar: {}, indice: {}", tp, i)
 		end
 	end
 end
@@ -791,7 +792,7 @@ function unserializeTable(str, out)
 	if tmp then
 		tmp = tmp()
 	else
-		logger.warn("[unserializeTable] - Unserialization error: {}", str)
+		logger.warn("[unserializeTable] - Error de desinicializacion: {}", str)
 		return false
 	end
 	return table.copy(tmp, out)
@@ -820,7 +821,7 @@ function kickPlayersAfterTime(players, fromPos, toPos, exit)
 		local player = Player(pid)
 		if player and player:getPosition():isInRange(fromPos, toPos) then
 			player:teleportTo(exit)
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You were kicked by exceding time inside the boss room.")
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Has sido expulsado por exeder el tiempo maximo para estar dentro de la zona del Jefe..")
 		end
 	end
 end
@@ -833,7 +834,7 @@ function Player:doCheckBossRoom(bossName, fromPos, toPos)
 					local sqm = Tile(Position(x, y, z))
 					if sqm then
 						if sqm:getTopCreature() and sqm:getTopCreature():isPlayer() then
-							self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You must wait. Someone is challenging " .. bossName .. " now.")
+							self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Espera. Alguien esta enfrentandose a " .. bossName .. ".")
 							return false
 						end
 					end
@@ -870,7 +871,7 @@ function CheckDustLevel(monsterForge, player)
 	end
 	if influencedLevel and influencedLevel > 0 then
 		if influencedLevel > 5 then
-			player:sendCancelMessage("Invalid influenced level.")
+			player:sendCancelMessage("Nivel de Influencia Invalido.")
 			return false
 		end
 		canSetInfluenced = true
@@ -880,7 +881,7 @@ end
 
 function SetFiendish(monsterType, position, player, monster)
 	if monsterType and not monsterType:isForgeCreature() then
-		player:sendCancelMessage("Only allowed monsters can be fiendish.")
+		player:sendCancelMessage("Solo las criaturas permitidas pueden ser diabolicas.")
 		return false
 	end
 	monster:setFiendish(position, player)
@@ -888,7 +889,7 @@ end
 
 function SetInfluenced(monsterType, monster, player, influencedLevel)
 	if monsterType and not monsterType:isForgeCreature() then
-		player:sendCancelMessage("Only allowed monsters can be influenced.")
+		player:sendCancelMessage("Solo las criaturas permitidas pueden ser influenciadas.")
 		return false
 	end
 	local influencedMonster = Monster(ForgeMonster:pickInfluenced())
@@ -913,13 +914,13 @@ end
 
 function HasValidTalkActionParams(player, param, usage)
 	if not param or param == "" then
-		player:sendCancelMessage("Command param required. Usage: " .. usage)
+		player:sendCancelMessage("Parametro para el comando requerido. Uso: " .. usage)
 		return false
 	end
 
 	local split = param:split(",")
 	if not split[2] then
-		player:sendCancelMessage("Insufficient parameters. Usage: " .. usage)
+		player:sendCancelMessage("Parametros insuficientes. Uso: " .. usage)
 		return false
 	end
 
@@ -938,7 +939,7 @@ end
 function GetNextOccurrence(timeStr)
 	local hours, minutes, seconds = string.match(timeStr, "(%d+):(%d+):(%d+)")
 	if not hours or not minutes or not seconds then
-		error("Invalid time string format.")
+		error("Cadena de formato de tiempo invalida.")
 		return nil
 	end
 
@@ -988,19 +989,19 @@ function ParseDuration(duration)
 	for numStr, unit in string.gmatch(duration, "([%d%.]+)(%a+)") do
 		local num = tonumber(numStr)
 		if not num then
-			error("Invalid numeric part in duration string")
+			error("Parte numerica invalida en la cadena de duracion")
 		end
 
 		local multiplier = multipliers[unit]
 		if not multiplier then
-			error("Invalid unit in duration string")
+			error("Unidad de la cadena de duracion invalida")
 		end
 
 		total = total + (num * multiplier)
 	end
 
 	if total == 0 then
-		error("Invalid duration string")
+		error("Cadena de duracion invalida")
 	end
 
 	return total
