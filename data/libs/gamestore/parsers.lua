@@ -99,7 +99,7 @@ local function parseTransferableCoins(playerId, msg)
 
 	db.query("UPDATE `accounts` SET `coins_transferable` = `coins_transferable` + " .. amount .. " WHERE `id` = " .. accountId)
 	player:removeTransferableCoinsBalance(amount)
-	addPlayerEvent(sendStorePurchaseSuccessful, 550, playerId, "You have transfered " .. amount .. " coins to " .. reciver .. " successfully")
+	addPlayerEvent(sendStorePurchaseSuccessful, 550, playerId, "Has transferido " .. amount .. "monedas a " .. reciver .. " successfully")
 
 	-- Adding history for both receiver/sender
 	GameStore.insertHistory(accountId, GameStore.HistoryTypes.HISTORY_TYPE_NONE, player:getName() .. " te ha transferido.", amount, GameStore.CoinType.Transferable)

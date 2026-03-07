@@ -49,7 +49,7 @@ end
 local function processInstantRewardAccess(player, offerCount)
 	local limit = GameStore.ItemLimit.INSTANT_REWARD_ACCESS
 	if player:getCollectionTokens() + offerCount >= limit + 1 then
-		return error({ code = 1, message = "You cannot own more than " .. limit .. " reward tokens." })
+		return error({ code = 1, message = "No puedes poseer mas de " .. limit .. " fichas de recompensa." })
 	end
 	player:setCollectionTokens(player:getCollectionTokens() + offerCount)
 end
@@ -88,7 +88,7 @@ local function processStackablePurchase(player, offerId, offerCount, offerName, 
 					inboxItem:setAttribute(ITEM_ATTRIBUTE_STORE, systemTime())
 				end
 			else
-				return error({ code = 0, message = "Error adding item to store inbox." })
+				return error({ code = 0, message = "Error al añadir el objeto al buzon de la tienda." })
 			end
 			remainingCount = remainingCount - countToAdd
 		end
@@ -116,7 +116,7 @@ local function processHouseRelatedPurchase(player, offer)
 			if isCaskItem(itemId) then
 				local decoKit = inbox:addItem(ITEM_DECORATION_KIT, 1)
 				if decoKit then
-					decoKit:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, "You bought this item in the Store.\nUnwrap it in your own house to create a <" .. ItemType(itemId):getName() .. ">.")
+					decoKit:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, "Has comprado este objeto en la Tienda.\nDesempaquetalo en tu casa para crear: <" .. ItemType(itemId):getName() .. ">.")
 					decoKit:setCustomAttribute("unWrapId", itemId)
 					decoKit:setAttribute(ITEM_ATTRIBUTE_DATE, offer.count)
 
@@ -128,7 +128,7 @@ local function processHouseRelatedPurchase(player, offer)
 				for i = 1, offer.count do
 					local decoKit = inbox:addItem(ITEM_DECORATION_KIT, 1)
 					if decoKit then
-						decoKit:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, "You bought this item in the Store.\nUnwrap it in your own house to create a <" .. ItemType(itemId):getName() .. ">.")
+						decoKit:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, "Has comprado este objeto en la Tienda.\nDesempaquetalo en tu casa para crear: <" .. ItemType(itemId):getName() .. ">.")
 						decoKit:setCustomAttribute("unWrapId", itemId)
 
 						if not offer.movable then
@@ -153,14 +153,14 @@ local function processOutfitPurchase(player, offerSexIdTable, addon)
 	end
 
 	if not looktype then
-		return error({ code = 0, message = "This outfit seems not to suit your sex, we are sorry for that!" })
+		return error({ code = 0, message = "Este atuendo no es de tu genero, lo sentimos!" })
 	elseif (not player:hasOutfit(looktype, 0)) and (_addon == 1 or _addon == 2) then
-		return error({ code = 0, message = "You must own the outfit before you can buy its addon." })
+		return error({ code = 0, message = "Primero tienes que poseer el atuendo para poder comprar el complemento." })
 	elseif player:hasOutfit(looktype, _addon) then
-		return error({ code = 0, message = "You already own this outfit." })
+		return error({ code = 0, message = "Ya posees este atuendo." })
 	else
 		if not player:addOutfitAddon(looktype, _addon) or not player:hasOutfit(looktype, _addon) then
-			error({ code = 0, message = "There has been an issue with your outfit purchase. Your purchase has been cancelled." })
+			error({ code = 0, message = "Ha ocurrido un error en la compra. Ha sido cancelada." })
 		else
 			player:addOutfitAddon(offerSexIdTable.male, _addon)
 			player:addOutfitAddon(offerSexIdTable.female, _addon)
@@ -170,7 +170,7 @@ end
 
 local function processMountPurchase(player, offerId)
 	if player:hasMount(offerId) then
-		return error({ code = 0, message = "You already own this mount." })
+		return error({ code = 0, message = "Ya posees esta montura." })
 	end
 
 	player:addMount(offerId)
@@ -181,7 +181,7 @@ local function processNameChangePurchase(player, offer, productType, newName)
 		local tile = Tile(player:getPosition())
 		if tile then
 			if not tile:hasFlag(TILESTATE_PROTECTIONZONE) then
-				return error({ code = 1, message = "You can change name only in Protection Zone." })
+				return error({ code = 1, message = "Solo puedes cambiarte el nombre en una Zona de Proteccion." })
 			end
 		end
 
@@ -191,7 +191,7 @@ local function processNameChangePurchase(player, offer, productType, newName)
 
 		local normalizedName = Game.getNormalizedPlayerName(newName, true)
 		if normalizedName then
-			return error({ code = 1, message = "This name is already used, please try again!" })
+			return error({ code = 1, message = "Ese nombre esta en uso, prueba con otro!" })
 		end
 
 		local result = GameStore.canChangeToName(newName)
@@ -203,9 +203,9 @@ local function processNameChangePurchase(player, offer, productType, newName)
 		local message
 		if not namelockReason then
 			player:makeCoinTransaction(offer)
-			message = string.format("You have purchased %s for %d coins.", offer.name, offer.price)
+			message = string.format("Has comprado %s por %d monedas.", offer.name, offer.price)
 		else
-			message = "Your character has been renamed successfully."
+			message = "Has cambiado el nombre de tu personaje."
 		end
 		addPlayerEvent(sendStorePurchaseSuccessful, 500, player:getId(), message)
 
@@ -227,14 +227,14 @@ end
 
 local function processPreyThirdSlot(player)
 	if player:preyThirdSlot() then
-		return error({ code = 1, message = "You already have unlocked all prey slots." })
+		return error({ code = 1, message = "Ya has desbloqueado todas las ranuras de criatura." })
 	end
 	player:preyThirdSlot(true)
 end
 
 local function processTaskHuntingThirdSlot(player)
 	if player:taskHuntingThirdSlot() then
-		return error({ code = 1, message = "You already have unlocked all task hunting slots." })
+		return error({ code = 1, message = "Ya tienes todas las ranuras de caza." })
 	end
 	player:taskHuntingThirdSlot(true)
 end
@@ -242,7 +242,7 @@ end
 local function processPreyBonusReroll(player, offerCount)
 	local limit = GameStore.ItemLimit.PREY_WILDCARD
 	if player:getPreyCards() + offerCount >= limit + 1 then
-		return error({ code = 1, message = "You cannot own more than " .. limit .. " prey wildcards." })
+		return error({ code = 1, message = "No puedes poseer mas de " .. limit .. " cartas de criatura." })
 	end
 	player:addPreyCards(offerCount)
 end
@@ -251,17 +251,17 @@ local function processTempleTeleportPurchase(player)
 	local inPz = player:getTile():hasFlag(TILESTATE_PROTECTIONZONE)
 	local inFight = player:isPzLocked() or player:getCondition(CONDITION_INFIGHT, CONDITIONID_DEFAULT)
 	if not inPz and inFight then
-		return error({ code = 0, message = "You can't use temple teleport in fight!" })
+		return error({ code = 0, message = "No puedes usar el teleport al templo cuando si estas bajo amenaza." })
 	end
 
 	player:teleportTo(player:getTown():getTemplePosition())
 	player:getPosition():sendMagicEffect(CONST_ME_TELEPORT)
-	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You have been teleported to your hometown.")
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Has sido teletransportado a tu ciudad.")
 end
 
 local function processHirelingPurchase(player, offer, productType, hirelingName, chosenSex)
 	if player:getClient().version < 1200 then
-		return error({ code = 1, message = "You cannot buy hirelings on client 10, please relog on client 12 and try again." })
+		return error({ code = 1, message = "No puedes contratar mayordomos en esta version, no estas usando un cliente adecuado." })
 	end
 
 	if productType == GameStore.ClientOfferTypes.CLIENT_STORE_OFFER_HIRELING then
@@ -276,17 +276,17 @@ local function processHirelingPurchase(player, offer, productType, hirelingName,
 
 		local hireling = player:addNewHireling(hirelingName, chosenSex)
 		if not hireling then
-			return error({ code = 1, message = "Error delivering your hireling lamp, try again later." })
+			return error({ code = 1, message = "Error al entregar tu lampara de mayordomo, intentalo mas tarde." })
 		end
 
 		player:makeCoinTransaction(offer, hirelingName)
-		local message = "You have successfully bought " .. hirelingName
+		local message = "Has comprado " .. hirelingName
 		player:createTransactionSummary(offer.type, 1)
 		return addPlayerEvent(sendStorePurchaseSuccessful, 650, player:getId(), message)
 		-- If not, we ask him to do!
 	else
 		if player:getHirelingsCount() >= GameStore.ItemLimit.HIRELING then
-			return error({ code = 1, message = "You cannot have more than " .. GameStore.ItemLimit.HIRELING .. " hirelings." })
+			return error({ code = 1, message = "No puedes poseer mas de " .. GameStore.ItemLimit.HIRELING .. " mayordomos." })
 		end
 		-- TODO: Use the correct dialog (byte 0xDB) on client 1205+
 		-- for compatibility, request name using the change name dialog
@@ -308,29 +308,29 @@ local function HandleHirelingNameChange(playerId, offer, newHirelingName)
 		end
 
 		if not hireling then
-			return playerInFunction:showInfoModal("Error", "Your must select a hireling.")
+			return playerInFunction:showInfoModal("Error", "Tienes que seleccionar un mayordomo.")
 		end
 
 		if hireling.active > 0 then
-			return playerInFunction:showInfoModal("Error", "Your hireling must be inside his/her lamp.")
+			return playerInFunction:showInfoModal("Error", "Tu mayordomo tiene que estar dentro de su lampara.")
 		end
 
 		local oldName = hireling.name
 		hireling.name = data.newHirelingName
 
-		if not playerInFunction:makeCoinTransaction(data.offer, oldName .. " to " .. hireling.name) then
-			return playerInFunction:showInfoModal("Error", "Transaction error")
+		if not playerInFunction:makeCoinTransaction(data.offer, oldName .. " a " .. hireling.name) then
+			return playerInFunction:showInfoModal("Error", "Error en la Transaccion")
 		end
 
 		local lamp = playerInFunction:findHirelingLamp(hireling:getId())
 		if lamp then
-			lamp:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, "This mysterious lamp summons your very own personal hireling.\nThis item cannot be traded.\nThis magic lamp is the home of " .. hireling:getName() .. ".")
+			lamp:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, "Esta lampara misteriosa hace invocar a tu propio mayordomo.\nEste objeto no puede ser comerciado.\nEsta lampara pertenece a " .. hireling:getName() .. ".")
 		end
-		logger.debug("{} has been renamed to {}", oldName, hireling.name)
+		logger.debug("{} ha sido renombrado a {}", oldName, hireling.name)
 		sendUpdatedStoreBalances(playerIdInFunction)
 	end
 
-	player:sendHirelingSelectionModal("Choose a Hireling", "Select a hireling below", functionCallback, { offer = offer, newHirelingName = newHirelingName })
+	player:sendHirelingSelectionModal("Selecciona un Mayordomo", "Selecciona a un Mayordomo", functionCallback, { offer = offer, newHirelingName = newHirelingName })
 end
 
 local function processHirelingChangeNamePurchase(player, offer, productType, newHirelingName)

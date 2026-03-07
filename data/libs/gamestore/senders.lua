@@ -393,7 +393,7 @@ local function sendStoreTransactionHistory(playerId, page, entriesPerPage)
 
 	local entries = GameStore.retrieveHistoryEntries(player:getAccountId(), page, entriesPerPage) -- this makes everything easy!
 	if #entries == 0 then
-		return addPlayerEvent(sendStoreError, 250, playerId, GameStore.StoreErrors.STORE_ERROR_HISTORY, "You don't have any entries yet.")
+		return addPlayerEvent(sendStoreError, 250, playerId, GameStore.StoreErrors.STORE_ERROR_HISTORY, "No existe ningun historial.")
 	end
 
 	local oldProtocol = player:getClient().version < 1200

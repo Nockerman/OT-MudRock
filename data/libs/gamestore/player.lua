@@ -180,12 +180,12 @@ local function canReceiveStoreItems(self, offerId, offerCount)
 
 	if slotsOccupied + slotsNeeded > maxCapacity then
 		local slotsAvailable = maxCapacity - slotsOccupied
-		return false, string.format("Not enough free slots in your store inbox. You need %d more slot(s). Currently occupied: %d/%d", slotsNeeded - slotsAvailable, slotsOccupied, maxCapacity)
+		return false, string.format("No tienes huecos libres en tu buzon de la tienda. Necesitas %d hueco(s) mas. Ocupados: %d/%d", slotsNeeded - slotsAvailable, slotsOccupied, maxCapacity)
 	end
 
 	local totalWeight = itemType:getWeight(offerCount or 1)
 	if self:getFreeCapacity() < totalWeight then
-		return false, "Please make sure you have enough free capacity to hold this item."
+		return false, "Asegurate de tener capacidad disponible para llevarte este objeto."
 	end
 
 	return true, ""

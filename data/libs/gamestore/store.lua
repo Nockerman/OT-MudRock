@@ -186,7 +186,7 @@ local function resolveState(state, context)
 		end
 	end
 
-	local message = "Invalid Game Store state"
+	local message = "Estado de la Tienda Invalido"
 	if context then
 		message = message .. " (" .. context .. ")"
 	end
@@ -235,7 +235,7 @@ local function canUseHirelingName(name)
 		ability = false,
 	}
 	if name:len() < 3 or name:len() > 18 then
-		result.reason = "The length of the hireling name must be between 3 and 18 characters."
+		result.reason = "El nombre del mayordomo tiene que contener entre 3 y 18 caracteres."
 		return result
 	end
 
@@ -247,18 +247,18 @@ local function canUseHirelingName(name)
 
 	local matchtwo = name:match("^%s+")
 	if matchtwo then
-		result.reason = "The hireling name can't have whitespace at begin."
+		result.reason = "El nombre del mayorodomo no puede contener un espacio al principio."
 		return result
 	end
 
 	local matchthree = name:match("[^a-zA-Z ]")
 	if matchthree then
-		result.reason = "The hireling name has invalid characters"
+		result.reason = "El nombre de del mayordomo contiene caracteres ilegales"
 		return result
 	end
 
 	if count > 1 then
-		result.reason = "The hireling name have more than 1 whitespace."
+		result.reason = "El nombre del mayordomo tiene mas de 1 espacio."
 		return result
 	end
 
@@ -268,7 +268,7 @@ local function canUseHirelingName(name)
 	for wordIndex, word in ipairs(words) do
 		for partIndex, nameWord in ipairs(split) do
 			if nameWord:lower() == word then
-				result.reason = "You can't use word \"" .. word .. '" in your hireling name.'
+				result.reason = "No puedes usar la palabra \"" .. word .. '" en el nombre del mayordomo.'
 				return result
 			end
 		end
@@ -277,7 +277,7 @@ local function canUseHirelingName(name)
 	local tmpName = name:gsub("%s+", "")
 	for i = 1, #words do
 		if tmpName:lower():find(words[i]) then
-			result.reason = "You can't use word \"" .. words[i] .. '" with whitespace in your hireling name.'
+			result.reason = "No puedes usar la palabra \"" .. words[i] .. '" con espacios en el nombre de tu mayordomo.'
 			return result
 		end
 	end
@@ -292,7 +292,7 @@ local function canChangeToName(name)
 	}
 
 	if name:len() < 3 or name:len() > 29 then
-		result.reason = "The length of your new name must be between 3 and 29 characters."
+		result.reason = "La cantidad de caracteres en el nuevo nombre tiene que ser de 3 y 29 caracteres."
 		return result
 	end
 
@@ -304,17 +304,17 @@ local function canChangeToName(name)
 
 	local matchtwo = name:match("^%s+")
 	if matchtwo then
-		result.reason = "Your new name can't have whitespace at the beginning."
+		result.reason = "Tu nuevo nombre no puede contener espacios al principioYour new name can't have whitespace at the beginning."
 		return result
 	end
 
 	if count > 2 then
-		result.reason = "Your new name can't have more than 2 spaces."
+		result.reason = "Tu nuevo nombre no puede tener mas de 2 espacios."
 		return result
 	end
 
 	if name:match("%s%s") then
-		result.reason = "Your new name can't have consecutive spaces."
+		result.reason = "Tu nombre no puede contener espacios consecutivos."
 		return result
 	end
 
