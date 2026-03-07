@@ -1,6 +1,6 @@
 function onSpeak(player, type, message)
-	if player:getLevel() < 20 and not player:isPremium() then
-		player:sendCancelMessage("You may not speak in this channel unless you have reached level 20 or your account has premium status.")
+	if player:getLevel() < 50 and not player:isPremium() and not player:isPremium() then
+		player:sendCancelMessage("No puedes hablar en este canal hasta haber alcanzado el nivel 50, o poseas el estatus de noble.")
 		return false
 	end
 

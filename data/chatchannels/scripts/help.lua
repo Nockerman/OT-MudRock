@@ -7,18 +7,18 @@ muted:setParameter(CONDITION_PARAM_TICKS, 3600000)
 function onSpeak(player, type, message)
 	local playerGroupType = player:getGroup():getId()
 	if player:getLevel() == 1 and playerGroupType == GROUP_TYPE_NORMAL then
-		player:sendCancelMessage("You may not speak into channels as long as you are on level 1.")
+		player:sendCancelMessage("No puedes hablar en este canal hasta ser nivel 1.")
 		return false
 	end
 
 	local hasExhaustion = player:kv():get("channel-help-exhaustion") or 0
 	if hasExhaustion > os.time() then
-		player:sendCancelMessage("You are muted from the Help channel for using it inappropriately.")
+		player:sendCancelMessage("Has sido silenciado del Canal de Ayuda por uso inapropiado.")
 		return false
 	end
 
 	if playerGroupType >= GROUP_TYPE_TUTOR then
-		if string.sub(message, 1, 6) == "!mute " then
+		if string.sub(message, 1, 6) == "!callar " then
 			local targetName = string.sub(message, 7)
 			local target = Player(targetName)
 			if target then
@@ -26,18 +26,18 @@ function onSpeak(player, type, message)
 					if not target:getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP) then
 						target:addCondition(muted)
 						target:kv():set("channel-help-exhaustion", os.time() + 180) -- 3 minutes
-						sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, target:getName() .. " has been muted by " .. player:getName() .. " for using Help Channel inappropriately.")
+						sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, target:getName() .. " ha sido silenciado por " .. player:getName() .. " por un uso inapropiado del canal.")
 					else
-						player:sendCancelMessage("That player is already muted.")
+						player:sendCancelMessage("Ese ciudadano ya esta silenciado.")
 					end
 				else
-					player:sendCancelMessage("You are not authorized to mute that player.")
+					player:sendCancelMessage("No estas autorizado para silenciar a otro ciudadano.")
 				end
 			else
 				player:sendCancelMessage(RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE)
 			end
 			return false
-		elseif string.sub(message, 1, 8) == "!unmute " then
+		elseif string.sub(message, 1, 8) == "!hablar " then
 			local targetName = string.sub(message, 9)
 			local target = Player(targetName)
 			if target then
@@ -45,13 +45,13 @@ function onSpeak(player, type, message)
 					local hasExhaustionTarget = target:kv():get("channel-help-exhaustion") or 0
 					if hasExhaustionTarget > os.time() then
 						target:removeCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_HELP)
-						sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, target:getName() .. " has been unmuted.")
+						sendChannelMessage(CHANNEL_HELP, TALKTYPE_CHANNEL_R1, target:getName() .. " ya puede volver a hablar.")
 						target:kv():remove("channel-help-exhaustion")
 					else
-						player:sendCancelMessage("That player is not muted.")
+						player:sendCancelMessage("Ese ciudadano no esta silenciado.")
 					end
 				else
-					player:sendCancelMessage("You are not authorized to unmute that player.")
+					player:sendCancelMessage("No estas autorizado para permitirle hablar a otro ciudadano.")
 				end
 			else
 				player:sendCancelMessage(RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE)

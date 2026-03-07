@@ -1,7 +1,7 @@
 function onSpeak(player, type, message)
 	local playerGroupType = player:getGroup():getId()
-	if player:getLevel() == 1 and playerGroupType < GROUP_TYPE_GAMEMASTER then
-		player:sendCancelMessage("You may not speak into channels as long as you are on level 1.")
+	if player:getLevel() == 50 and playerGroupType < GROUP_TYPE_GAMEMASTER and not player:isPremium() then
+		player:sendCancelMessage("No puedes hablar en este canal hasta haber alcanzado el nivel 50, o poseas el estatus de noble.")
 		return false
 	end
 

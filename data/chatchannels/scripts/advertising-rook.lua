@@ -6,7 +6,7 @@ local CHANNEL_ADVERTISING_ROOK = 6
 
 local muted = Condition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT)
 muted:setParameter(CONDITION_PARAM_SUBID, CHANNEL_ADVERTISING_ROOK)
-muted:setParameter(CONDITION_PARAM_TICKS, 120000)
+muted:setParameter(CONDITION_PARAM_TICKS, 300000)
 
 function onSpeak(player, type, message)
 	if player:getGroup():getId() >= GROUP_TYPE_GAMEMASTER then
@@ -17,12 +17,12 @@ function onSpeak(player, type, message)
 	end
 
 	if player:getLevel() == 1 then
-		player:sendCancelMessage("You may not speak into channels as long as you are on level 1.")
+		player:sendCancelMessage("No puedes hablar en este canal hasta ser nivel 1.")
 		return false
 	end
 
 	if player:getCondition(CONDITION_CHANNELMUTEDTICKS, CONDITIONID_DEFAULT, CHANNEL_ADVERTISING_ROOK) then
-		player:sendCancelMessage("You may only place one offer in two minutes.")
+		player:sendCancelMessage("Solo puedes añadir una oferta cada 5 minutos.")
 		return false
 	end
 	player:addCondition(muted)
