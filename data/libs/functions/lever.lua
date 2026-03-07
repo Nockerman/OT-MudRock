@@ -112,7 +112,7 @@ end
 function Lever:checkPositions()
 	local positions = self:getPositions()
 	if not positions then
-		error("Positions: not setted")
+		error("Posiciones: no definidas")
 		return nil
 	end
 	local array = {}
@@ -143,7 +143,7 @@ end
 function Lever.checkConditions(self) -- It will check the conditions defined in setCondition()
 	local info = self:getInfoPositions()
 	if not info then
-		error("Necessary informations from positions")
+		error("Es necesaria informacion sobre las posiciones")
 		return false
 	end
 	for i, v in pairs(info) do
@@ -184,7 +184,7 @@ end
 function Lever.setCooldownAllPlayers(self, bossName, value)
 	local info = self:getInfoPositions()
 	if not info then
-		error("Necessary information from players")
+		error("Es necesaria informacion sobre los jugadores")
 		return false
 	end
 
@@ -203,7 +203,7 @@ function Lever.canUseLever(self, player, bossName, timeToFightAgain)
 	for _, v in pairs(info) do
 		local newPlayer = v.creature
 		if newPlayer and not newPlayer:canFightBoss(bossName) then
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You or a member in your team have to wait " .. timeToFightAgain .. " hours to face " .. bossName .. " again!")
+			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Tu o un miembro de tu Grupo tiene que esperar " .. timeToFightAgain .. " horas para enfrentarse contra " .. bossName .. "!")
 			newPlayer:getPosition():sendMagicEffect(CONST_ME_POFF)
 			return false
 		end

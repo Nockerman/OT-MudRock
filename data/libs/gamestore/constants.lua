@@ -1,7 +1,7 @@
 local GameStore = {
 	ModuleName = "GameStore",
-	Developers = { "Cjaker", "metabob", "Rick", "Dudantas" },
-	Version = "2.0",
+	Developers = { "Nockerman" },
+	Version = "0.1",
 	LastUpdated = "21-10-2025 9:37PM",
 }
 

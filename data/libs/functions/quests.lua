@@ -259,7 +259,7 @@ function Player.getMissionName(self, questId, missionId)
 	local mission = Game.getMission(questId, missionId)
 	if mission then
 		if self:missionIsCompleted(questId, missionId) then
-			return mission.name .. " (completed)"
+			return mission.name .. " (completeda)"
 		end
 		return mission.name
 	end
@@ -288,7 +288,7 @@ function Player.getMissionDescription(self, questId, missionId)
 		end
 		return evaluateText(mission.states[state], self)
 	end
-	return "An error has occurred, please contact a gamemaster."
+	return "Un error ha ocurrido, contacta con administracion."
 end
 
 function Player.sendQuestLog(self)
@@ -372,7 +372,7 @@ function Player.updateStorage(self, key, value, oldValue, currentFrameTime)
 	if LastQuestlogUpdate[playerId] ~= currentFrameTime and Game.isQuestStorage(key, value, oldValue) then
 		LastQuestlogUpdate[playerId] = currentFrameTime
 		if value ~= oldValue then
-			self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your questlog has been updated.")
+			self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "El Diario de Misiones se ha actualizado.")
 		end
 	end
 	local missions = self:getMissionsData(key)
@@ -385,7 +385,7 @@ function Player.updateStorage(self, key, value, oldValue, currentFrameTime)
 end
 
 local function sendPrint(questId, index)
-	logger.warn("[sendPrint] - Quest id:[{}]] mission:[{}]", questId, index)
+	logger.warn("[sendPrint] - ID Mision:[{}]] Mision:[{}]", questId, index)
 end
 
 for questId, quest in pairs(Quests) do
@@ -394,23 +394,23 @@ for questId, quest in pairs(Quests) do
 		for index, value in ipairs(quest.missions) do
 			if index then
 				if not value.name then
-					logger.error("Quest.load: Wrong mission name found")
+					logger.error("Quest.load: Encontrado un nombre de mision erroneo")
 					sendPrint(questId, index)
 				end
 				if not value.storageId then
-					logger.error("Quest.load: Wrong mission storage found")
+					logger.error("Quest.load: Encontrado un contenedor de mision erroneo")
 					sendPrint(questId, index)
 				end
 				if not value.missionId then
-					logger.error("Quest.load: Wrong mission id found")
+					logger.error("Quest.load: Encontrado una id de mision erronea")
 					sendPrint(questId, index)
 				end
 				if not value.startValue then
-					logger.error("Quest.load: Wrong mission start value found")
+					logger.error("Quest.load: Encontrado un valor de inicio de mision erroneo")
 					sendPrint(questId, index)
 				end
 				if not value.endValue then
-					logger.error("Quest.load: Wrong mission end value found")
+					logger.error("Quest.load: Encontrado un valor de fin de mision erroneo")
 					sendPrint(questId, index)
 				end
 			end

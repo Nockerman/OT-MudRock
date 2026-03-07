@@ -108,7 +108,7 @@ function Player.transferMoneyTo(self, target, amount)
 
 	local targetPlayer = Player(target)
 	if targetPlayer then
-		targetPlayer:sendTextMessage(MESSAGE_LOOK, self:getName() .. " has transferred " .. FormatNumber(amount) .. " gold coins to you.")
+		targetPlayer:sendTextMessage(MESSAGE_LOOK, self:getName() .. " te ha transferido " .. FormatNumber(amount) .. " monedas de oro.")
 	end
 	return true
 end
@@ -124,7 +124,7 @@ function Player.removeMoneyBank(self, amount)
 	if amount <= inventoryMoney then
 		self:removeMoney(amount)
 		if amount > 0 then
-			self:sendTextMessage(MESSAGE_TRADE, ("Paid %d gold from inventory."):format(amount))
+			self:sendTextMessage(MESSAGE_TRADE, ("Has pagado %d monedas de oro de tu inventario."):format(amount))
 		end
 		return true
 	end
@@ -140,7 +140,7 @@ function Player.removeMoneyBank(self, amount)
 		Bank.debit(self, remainingAmount)
 
 		self:setBankBalance(bankBalance - remainingAmount)
-		self:sendTextMessage(MESSAGE_TRADE, ("Paid %s from inventory and %s gold from bank account. Your account balance is now %s gold."):format(FormatNumber(amount - remainingAmount), FormatNumber(remainingAmount), FormatNumber(self:getBankBalance())))
+		self:sendTextMessage(MESSAGE_TRADE, ("Has pagado %s monedas de oro de tu inventario y otras %s de tu cuenta bancaria. Tu saldo ahora es de %s monedas de oro."):format(FormatNumber(amount - remainingAmount), FormatNumber(remainingAmount), FormatNumber(self:getBankBalance())))
 		return true
 	end
 	return false
@@ -217,11 +217,11 @@ function Player.getMarriageDescription(thing)
 	if getPlayerMarriageStatus(thing:getGuid()) == MARRIED_STATUS then
 		playerSpouse = getPlayerSpouse(thing:getGuid())
 		if self == thing then
-			descr = descr .. " You are "
+			descr = descr .. " Eres "
 		else
 			descr = descr .. " " .. thing:getSubjectPronoun():titleCase() .. " " .. thing:getSubjectVerb() .. " "
 		end
-		descr = descr .. "married to " .. getPlayerNameById(playerSpouse) .. "."
+		descr = descr .. "pareja de " .. getPlayerNameById(playerSpouse) .. "."
 	end
 	return descr
 end
@@ -239,12 +239,12 @@ function Player:CreateFamiliarSpell(spellId)
 	local playerPosition = self:getPosition()
 	if not self:isPremium() then
 		playerPosition:sendMagicEffect(CONST_ME_POFF)
-		self:sendCancelMessage("You need a premium account.")
+		self:sendCancelMessage("Necesitas tener estatus de Noble.")
 		return false
 	end
 
 	if #self:getSummons() >= 1 and self:getAccountType() < ACCOUNT_TYPE_GOD then
-		self:sendCancelMessage("You can't have other summons.")
+		self:sendCancelMessage("No invocar mas criaturas.")
 		playerPosition:sendMagicEffect(CONST_ME_POFF)
 		return false
 	end
@@ -421,8 +421,8 @@ end
 
 function Player:addItemStoreInbox(itemId, amount, movable, setOwner)
 	if not amount then
-		logger.error("[Player:addItemStoreInbox] item '{}' amount is nil.", itemId)
-		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Item amount is wrong, please contact an administrator.")
+		logger.error("[Player:addItemStoreInbox] La cantidad del objeto '{}' es nil.", itemId)
+		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "La cantidad de objetos es erronea, contacta con administracion.")
 		return nil
 	end
 
@@ -462,7 +462,7 @@ function Player:calculateLootFactor(monster)
 	if not self:canReceiveLoot() then
 		return {
 			factor = 0.0,
-			msgSuffix = "due to low stamina",
+			msgSuffix = "debido a su poco aguante",
 		}
 	end
 
@@ -493,7 +493,7 @@ function Player:calculateLootFactor(monster)
 		factor = factor * (1 + vipBoost)
 	end
 	if vipBoost > 0 then
-		suffix = string.format("vip bonus %d%%", math.floor(vipBoost * 100 + 0.5))
+		suffix = string.format("Bonus por Nobleza %d%%", math.floor(vipBoost * 100 + 0.5))
 	end
 
 	return {
@@ -522,7 +522,7 @@ function Player:setFiendish()
 	local tile = Tile(position)
 	local thing = tile:getTopVisibleThing(self)
 	if not tile or thing and not thing:isMonster() then
-		self:sendCancelMessage("Monster not found.")
+		self:sendCancelMessage("Criatura no encontrada.")
 		return false
 	end
 
@@ -708,7 +708,7 @@ function Player.loadDailyRewardBonuses(self)
 			DailyRewardBonus.Soul[self:getId()] = addEvent(RegenSoul, delay, self:getId(), delay)
 		end
 	end
-	logger.debug("Player: {}, streak level: {}, active bonuses: {}", self:getName(), streakLevel, self:getActiveDailyRewardBonusesName())
+	logger.debug("Jugador: {}, racha de: {}, bonus activos: {}", self:getName(), streakLevel, self:getActiveDailyRewardBonusesName())
 end
 
 function Player.getRewardChest(self, autocreate)
@@ -758,7 +758,7 @@ do
 			{ minPoints = 3240, percentage = 45 },
 			{ minPoints = 3600, percentage = 50 },
 		},
-		messageTemplate = "Due to your long-term loyalty to " .. SERVER_NAME .. " you currently benefit from a ${bonusPercentage}% bonus on all of your skills. (You have ${loyaltyPoints} loyalty points)",
+		messageTemplate = "Por tu lealtad y nobleza a " .. SERVER_NAME .. " actualmente te beneficias de un bonus del ${bonusPercentage}% en todas tus habilidades. (Tienes ${loyaltyPoints} puntos de lealtad)",
 	}
 
 	function Player.initializeLoyaltySystem(self)
@@ -805,27 +805,27 @@ end
 
 function Player:canGetReward(rewardId, questName)
 	if self:questKV(questName):get("completed") then
-		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "It is empty.")
+		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Esta vacio.")
 		return false
 	end
 
 	local rewardItem = ItemType(rewardId)
 	if not rewardItem then
-		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Reward item is wrong, please contact an administrator.")
+		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Error en la recompensa, contacta con administracion.")
 		return false
 	end
 
 	local itemWeight = rewardItem:getWeight() / 100
-	local baseMessage = "You have found a " .. rewardItem:getName()
+	local baseMessage = "Has encontrado " .. rewardItem:getName()
 	local backpack = self:getSlotItem(CONST_SLOT_BACKPACK)
 	if not backpack or backpack:getEmptySlots(true) < 1 then
-		baseMessage = baseMessage .. ", but you have no room to take it."
+		baseMessage = baseMessage .. ", pero no tienes espacio para llevartelo."
 		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, baseMessage)
 		return false
 	end
 
 	if (self:getFreeCapacity() / 100) < itemWeight then
-		baseMessage = baseMessage .. ". Weighing " .. itemWeight .. " oz, it is too heavy for you to carry."
+		baseMessage = baseMessage .. ". Pesa " .. itemWeight .. " oz, pero es muy pesado para llevartelo."
 		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, baseMessage)
 		return false
 	end

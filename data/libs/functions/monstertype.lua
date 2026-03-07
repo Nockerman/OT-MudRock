@@ -33,7 +33,7 @@ function MonsterType:generateLootRoll(config, resultTable, player)
 		local chance = item.chance
 		if SoulWarQuest and iType:getId() == SoulWarQuest.bagYouDesireItemId then
 			result[item.itemId].chance = self:calculateBagYouDesireChance(player, chance)
-			logger.debug("Final chance for bag you desire: {}, original chance: {}", result[item.itemId].chance, chance)
+			logger.debug("Oportunidad final para la bolsa que deseas: {}, oportunidad inicial: {}", result[item.itemId].chance, chance)
 		end
 
 		local dynamicFactor = factor * (math.random(95, 105) / 100)

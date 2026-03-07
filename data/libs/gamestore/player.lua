@@ -37,12 +37,12 @@ local function canBuyOffer(self, offer)
 			local item = self:getItemById(offer.itemtype, true)
 			if item then
 				disabled = 1
-				disabledReason = "You already have a " .. ItemType(item:getId()):getName() .. "."
+				disabledReason = "Ya tienes: " .. ItemType(item:getId()):getName() .. "."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_BLESSINGS then
 			if self:getBlessingCount(offer.blessid) >= 5 then
 				disabled = 1
-				disabledReason = "You reached the maximum amount for this blessing."
+				disabledReason = "Has alcanzado la cantidad maxima de cargas para esta bendicion."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_ALLBLESSINGS then
 			local hasAnyMaxBlessing = false
@@ -54,7 +54,7 @@ local function canBuyOffer(self, offer)
 			end
 			if hasAnyMaxBlessing then
 				disabled = 1
-				disabledReason = "You already have all Blessings."
+				disabledReason = "Ya tienes todas las bendiciones."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_OUTFIT or offer.type == GameStore.OfferTypes.OFFER_TYPE_OUTFIT_ADDON then
 			local outfitLookType
@@ -66,95 +66,95 @@ local function canBuyOffer(self, offer)
 			if outfitLookType then
 				if offer.type == GameStore.OfferTypes.OFFER_TYPE_OUTFIT and self:hasOutfit(outfitLookType) then
 					disabled = 1
-					disabledReason = "You already have this outfit."
+					disabledReason = "Ya tienes este atuendo."
 				elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_OUTFIT_ADDON then
 					if self:hasOutfit(outfitLookType) then
 						if self:hasOutfit(outfitLookType, offer.addon) then
 							disabled = 1
-							disabledReason = "You already have this addon."
+							disabledReason = "Ya tienes este complemento."
 						end
 					else
 						disabled = 1
-						disabledReason = "You don't have the outfit, you can't buy the addon."
+						disabledReason = "No tienes ese atuendo, no puedes comprar el complemento."
 					end
 				end
 			else
 				disabled = 1
-				disabledReason = "The offer is fake."
+				disabledReason = "La oferta es falsa."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_MOUNT then
 			if self:hasMount(offer.id) then
 				disabled = 1
-				disabledReason = "You already have this mount."
+				disabledReason = "Ya tienes esa montura."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_INSTANT_REWARD_ACCESS then
 			if self:getCollectionTokens() >= GameStore.ItemLimit.INSTANT_REWARD_ACCESS then
 				disabled = 1
-				disabledReason = "You already have maximum of reward tokens."
+				disabledReason = "Tienes la cantidad maxima de simbolos de recompensa."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_PREYBONUS then
 			if self:getPreyCards() >= GameStore.ItemLimit.PREY_WILDCARD then
 				disabled = 1
-				disabledReason = "You already have maximum of prey wildcards."
+				disabledReason = "Tienes la cantidad maxima de cartas de criatura."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_CHARMS then
 			if self:charmExpansion() then
 				disabled = 1
-				disabledReason = "You already have charm expansion."
+				disabledReason = "Ya tienes la expansion de encantamiento."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_HUNTINGSLOT then
 			if self:taskHuntingThirdSlot() then
 				disabled = 1
-				disabledReason = "You already have 3 slots released."
+				disabledReason = "Ya tienes los 3 espacios desbloqueados."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_PREYSLOT then
 			if self:preyThirdSlot() then
 				disabled = 1
-				disabledReason = "You already have 3 slots released."
+				disabledReason = "Ya tienes lo 3 espacios desbloqueados."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_EXPBOOST then
 			local playerKV = self:kv()
 			local purchaseExpCount = playerKV:get(GameStore.Kv.expBoostCount) or 0
 			if purchaseExpCount == GameStore.ItemLimit.EXPBOOST then
 				disabled = 1
-				disabledReason = "You can't buy XP Boost for today."
+				disabledReason = "Hoy no puedes comprar un Aumento de Experiencia."
 			end
 			if self:getXpBoostTime() > 0 then
 				disabled = 1
-				disabledReason = "You already have an active XP boost."
+				disabledReason = "Ya tienes un Aumento de Experiencia activo."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_HIRELING then
 			if self:getHirelingsCount() >= GameStore.ItemLimit.HIRELING then
 				disabled = 1
-				disabledReason = "You already have bought the maximum number of allowed hirelings."
+				disabledReason = "Ya tienes la cantidad maxima de mayordomos."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_HIRELING_SKILL then
 			if self:hasHirelingSkill(GetHirelingSkillNameById(offer.id)) then
 				disabled = 1
-				disabledReason = "This skill is already unlocked."
+				disabledReason = "Esta habilidad ya esta desbloqueada."
 			end
 			if self:getHirelingsCount() <= 0 then
 				disabled = 1
-				disabledReason = "You need to have a hireling."
+				disabledReason = "Necesitas un mayordomo."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_HIRELING_OUTFIT then
 			if self:hasHirelingOutfit(GetHirelingOutfitNameById(offer.id)) then
 				disabled = 1
-				disabledReason = "This hireling outfit is already unlocked."
+				disabledReason = "Ya tienes este atuendo para el mayordomo."
 			end
 			if self:getHirelingsCount() <= 0 then
 				disabled = 1
-				disabledReason = "You need to have a hireling."
+				disabledReason = "Necesitas un mayordomo."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_HIRELING_NAMECHANGE then
 			if self:getHirelingsCount() <= 0 then
 				disabled = 1
-				disabledReason = "You need to have a hireling."
+				disabledReason = "Necesitas un mayordomo."
 			end
 		elseif offer.type == GameStore.OfferTypes.OFFER_TYPE_HIRELING_SEXCHANGE then
 			if self:getHirelingsCount() <= 0 then
 				disabled = 1
-				disabledReason = "You need to have a hireling."
+				disabledReason = "Necesitas un mayordomo."
 			end
 		end
 	end
@@ -165,7 +165,7 @@ end
 local function canReceiveStoreItems(self, offerId, offerCount)
 	local inbox = self:getStoreInbox()
 	if not inbox then
-		return false, "No store inbox found."
+		return false, "No se ha encontrado el buzon de la tienda."
 	end
 
 	local itemType = ItemType(offerId)

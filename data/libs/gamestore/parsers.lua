@@ -42,12 +42,12 @@ end
 
 local function onRecvbyte(player, msg, byte)
 	if player:getVocation():getId() == 0 and not GameStore.haveCategoryRook() then
-		player:sendCancelMessage("Store don't have offers for rookgaard citizen.")
+		player:sendCancelMessage("La tienda no tiene ofertas para aldeanos.")
 		return false
 	end
 
 	if player:isUIExhausted(250) then
-		player:sendCancelMessage("You are exhausted.")
+		player:sendCancelMessage("Estas exahusto.")
 		return true
 	end
 
@@ -80,21 +80,21 @@ local function parseTransferableCoins(playerId, msg)
 	local amount = msg:getU32()
 
 	if player:getTransferableCoins() < amount then
-		return addPlayerEvent(sendStoreError, 350, playerId, GameStore.StoreErrors.STORE_ERROR_TRANSFER, "You don't have this amount of coins.")
+		return addPlayerEvent(sendStoreError, 350, playerId, GameStore.StoreErrors.STORE_ERROR_TRANSFER, "No tienes esa cantidad de monedas.")
 	end
 
 	if reciver:lower() == player:getName():lower() then
-		return addPlayerEvent(sendStoreError, 350, playerId, GameStore.StoreErrors.STORE_ERROR_TRANSFER, "You can't transfer coins to yourself.")
+		return addPlayerEvent(sendStoreError, 350, playerId, GameStore.StoreErrors.STORE_ERROR_TRANSFER, "No puedes transferirte monedas a ti mismo.")
 	end
 
 	local resultId = db.storeQuery("SELECT `account_id` FROM `players` WHERE `name` = " .. db.escapeString(reciver:lower()) .. "")
 	if not resultId then
-		return addPlayerEvent(sendStoreError, 350, playerId, GameStore.StoreErrors.STORE_ERROR_TRANSFER, "We couldn't find that player.")
+		return addPlayerEvent(sendStoreError, 350, playerId, GameStore.StoreErrors.STORE_ERROR_TRANSFER, "No se ha podido encontrar a ese ciudadano.")
 	end
 
 	local accountId = Result.getNumber(resultId, "account_id")
 	if accountId == player:getAccountId() then
-		return addPlayerEvent(sendStoreError, 350, playerId, GameStore.StoreErrors.STORE_ERROR_TRANSFER, "You cannot transfer coin to a character in the same account.")
+		return addPlayerEvent(sendStoreError, 350, playerId, GameStore.StoreErrors.STORE_ERROR_TRANSFER, "No puedes transferir monedas entre personajes en la misma cuenta.")
 	end
 
 	db.query("UPDATE `accounts` SET `coins_transferable` = `coins_transferable` + " .. amount .. " WHERE `id` = " .. accountId)
@@ -102,8 +102,8 @@ local function parseTransferableCoins(playerId, msg)
 	addPlayerEvent(sendStorePurchaseSuccessful, 550, playerId, "You have transfered " .. amount .. " coins to " .. reciver .. " successfully")
 
 	-- Adding history for both receiver/sender
-	GameStore.insertHistory(accountId, GameStore.HistoryTypes.HISTORY_TYPE_NONE, player:getName() .. " transferred you this amount.", amount, GameStore.CoinType.Transferable)
-	GameStore.insertHistory(player:getAccountId(), GameStore.HistoryTypes.HISTORY_TYPE_NONE, "You transferred this amount to " .. reciver, -1 * amount, GameStore.CoinType.Transferable)
+	GameStore.insertHistory(accountId, GameStore.HistoryTypes.HISTORY_TYPE_NONE, player:getName() .. " te ha transferido.", amount, GameStore.CoinType.Transferable)
+	GameStore.insertHistory(player:getAccountId(), GameStore.HistoryTypes.HISTORY_TYPE_NONE, "Has transferido a " .. reciver, -1 * amount, GameStore.CoinType.Transferable)
 	openStore(playerId)
 	player:updateUIExhausted()
 end
@@ -141,20 +141,20 @@ local function parseRequestStoreOffers(playerId, msg)
 	elseif actionType == GameStore.ActionType.OPEN_HOME then
 		sendHomePage(player:getId())
 		if category then
-			addPlayerEvent(sendShowStoreOffers, 50, playerId, "Home Offers")
+			addPlayerEvent(sendShowStoreOffers, 50, playerId, "Ofertas")
 		end
 	elseif actionType == GameStore.ActionType.OPEN_PREMIUM_BOOST then
 		local subAction = msg:getByte()
 		local category
 
-		local premiumCategoryName = "Premium Time"
+		local premiumCategoryName = "Nobleza"
 		if configManager.getBoolean(configKeys.VIP_SYSTEM_ENABLED) then
-			premiumCategoryName = "VIP Shop"
+			premiumCategoryName = "Tienda Noble"
 		end
 		if subAction == 0 then
 			category = GameStore.getCategoryByName(premiumCategoryName)
 		else
-			category = GameStore.getCategoryByName("Boosts")
+			category = GameStore.getCategoryByName("Aumentos")
 		end
 
 		if category then
@@ -165,9 +165,9 @@ local function parseRequestStoreOffers(playerId, msg)
 		local offerId = subAction
 		local category
 		if subAction >= GameStore.SubActions.BLESSING_TWIST and subAction <= GameStore.SubActions.BLESSING_ALL_PVP then
-			category = GameStore.getCategoryByName("Blessings")
+			category = GameStore.getCategoryByName("Bendiciones")
 		else
-			category = GameStore.getCategoryByName("Useful Things")
+			category = GameStore.getCategoryByName("Utiles")
 		end
 
 		if subAction == GameStore.SubActions.PREY_THIRDSLOT_REAL then
@@ -186,11 +186,11 @@ local function parseRequestStoreOffers(playerId, msg)
 		local searchString = msg:getString()
 		local results = GameStore.fuzzySearchOffer(searchString)
 		if not results or #results == 0 then
-			return addPlayerEvent(sendStoreError, 250, playerId, GameStore.StoreErrors.STORE_ERROR_INFORMATION, 'No results found for "' .. searchString .. '".')
+			return addPlayerEvent(sendStoreError, 250, playerId, GameStore.StoreErrors.STORE_ERROR_INFORMATION, 'No se han encontrado resultados para "' .. searchString .. '".')
 		end
 
 		local searchResultsCategory = {
-			name = "Search",
+			name = "Buscar",
 			offers = results,
 		}
 
@@ -225,8 +225,8 @@ local function parseBuyStoreOffer(playerId, msg)
 	local currentTime = os.time()
 	local waittime = purchaseCooldown - currentTime
 	if waittime > 0 then
-		queueSendStoreAlertToUser("You are making many purchases simultaneously in a few moments.", 250, playerId)
-		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You are making many purchases simultaneously in a few moments.")
+		queueSendStoreAlertToUser("Estas haciendo muchas compras simultaneas, espera un momento.", 250, playerId)
+		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Estas haciendo muchas compras simultaneas.")
 		return false
 	end
 	playerKV:set(GameStore.Kv.purchaseCooldown, os.time() + 5)
@@ -255,7 +255,7 @@ local function parseBuyStoreOffer(playerId, msg)
 			and not offer.id
 		)
 	then
-		return queueSendStoreAlertToUser("This offer is unavailable [1]", 350, playerId, GameStore.StoreErrors.STORE_ERROR_INFORMATION)
+		return queueSendStoreAlertToUser("Esta oferta no esta disponible [1]", 350, playerId, GameStore.StoreErrors.STORE_ERROR_INFORMATION)
 	end
 
 	-- At this point the purchase is assumed to be formatted correctly
@@ -267,7 +267,7 @@ local function parseBuyStoreOffer(playerId, msg)
 	end
 	-- Check if offer can be honored
 	if offerPrice > 0 and not player:canPayForOffer(offerPrice, offerCoinType) then
-		return queueSendStoreAlertToUser("You don't have enough coins. Your purchase has been cancelled.", 250, playerId)
+		return queueSendStoreAlertToUser("No tienes monedas suficientes. Tu compra ha sido cancelada.", 250, playerId)
 	end
 
 	-- Use pcall to catch unhandled errors and send an alert to the user because the client expects it at all times; (OTClient will unlock UI)
@@ -326,12 +326,12 @@ local function parseBuyStoreOffer(playerId, msg)
 			GameStore.processHirelingOutfitPurchase(player, offer)
 		else
 			-- This should never happen by our convention, but just in case the guarding condition is messed up...
-			error({ code = 0, message = "This offer is unavailable [2]" })
+			error({ code = 0, message = "Esta oferta no esta disponible [2]" })
 		end
 	end)
 
 	if not pcallOk then
-		local alertMessage = pcallError.code and pcallError.message or "Something went wrong. Your purchase has been cancelled."
+		local alertMessage = pcallError.code and pcallError.message or "Algo ha salido mal. La compra ha sido cancelada."
 
 		-- unhandled error
 		if not pcallError.code then
@@ -347,10 +347,10 @@ local function parseBuyStoreOffer(playerId, msg)
 	local configure = useOfferConfigure(offer.type)
 	if configure ~= GameStore.ConfigureOffers.SHOW_CONFIGURE then
 		if not player:makeCoinTransaction(offer) then
-			return player:showInfoModal("Error", "Purchase transaction error")
+			return player:showInfoModal("Error", "Error en la transaccion de Compra")
 		end
 
-		local message = string.format("You have purchased %s for %d coins.", offer.name, offerPrice)
+		local message = string.format("Has comprado %s por %d monedas.", offer.name, offerPrice)
 		sendUpdatedStoreBalances(playerId)
 		return addPlayerEvent(sendStorePurchaseSuccessful, 650, playerId, message)
 	end

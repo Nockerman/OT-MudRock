@@ -118,7 +118,7 @@ end
 
 function Monster.setFiendish(self, position, player)
 	if not self or not self:isForgeable() then
-		player:sendCancelMessage("Only allowed monsters can be fiendish.")
+		player:sendCancelMessage("Solo las criaturas permitidas pueden ser diabolicas.")
 		return false
 	end
 
@@ -126,12 +126,12 @@ function Monster.setFiendish(self, position, player)
 	local fiendishMonster = Monster(ForgeMonster:pickFiendish())
 	if monsterType then
 		if not monsterType:isForgeCreature() then
-			player:sendCancelMessage("Only allowed monsters can be fiendish.")
+			player:sendCancelMessage("Solo las criaturas permitidas pueden ser diabolicas.")
 			return false
 		end
 	end
 	if fiendishMonster and fiendishMonster:getId() == self:getId() then
-		player:sendCancelMessage("This monster is already fiendish.")
+		player:sendCancelMessage("Esta critatura ya es diabolica.")
 		return false
 	end
 	position:sendMagicEffect(CONST_ME_MAGIC_RED)
@@ -141,20 +141,20 @@ function Monster.setFiendish(self, position, player)
 		Game.removeFiendishMonster(fiendishMonster:getId())
 	end
 	if Game.makeFiendishMonster(self:getId(), false) ~= 0 then
-		success = "set sucessfully a new fiendish monster"
+		success = "añadida correctamente la criatura diabolica"
 	else
-		success = "have error to set fiendish monster"
-		player:sendCancelMessage("This monster is not forgeable, fiendish not added.")
+		success = "ha ocurrido un error al añadir la criatura diabolica"
+		player:sendCancelMessage("Esta criatura no se puede forjar, no ha sido añadida.")
 	end
 
-	logger.info("Player {} {} with name {} and id {} on position {}", player:getName(), success, self:getName(), self:getId(), self:getPosition():toString())
+	logger.info("Jugador {} {} con nombre {} y id {} en la posicion {}", player:getName(), success, self:getName(), self:getId(), self:getPosition():toString())
 	return true
 end
 
 function Monster.setReward(self, enable)
 	if enable then
 		if not self:getType():isRewardBoss() then
-			error("Rewards can only be enabled to rewards bosses.")
+			error("Las recompensas solo se pueden activar con los Jefes.")
 			return false
 		end
 		_G.GlobalBosses[self:getId()] = {}

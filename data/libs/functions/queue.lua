@@ -25,7 +25,7 @@ end
 
 function Queue:dequeue()
 	if self:isEmpty() then
-		error("Queue is empty")
+		error("La cola esta vacia")
 	end
 
 	local value = self.items[self.head]
@@ -36,7 +36,7 @@ end
 
 function Queue:peek()
 	if self:isEmpty() then
-		error("Queue is empty")
+		error("La cola esta vacia")
 	end
 
 	return self.items[self.head]
@@ -58,7 +58,7 @@ setmetatable(RandomQueue, {
 
 function RandomQueue:dequeue()
 	if self:isEmpty() then
-		error("RandomQueue is empty")
+		error("La cola aleatoria esta vacia")
 	end
 
 	local index = math.random(self.head, self.tail)
